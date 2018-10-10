@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+    android:layout_marginBottom="15dp"
+    android:orientation="vertical"
+    android:background="@drawable/bg_shape">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:text="生活建议"
+        android:padding="10dp"/>
+    <TextView
+        android:id="@+id/tv_comfort"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:text="舒适度：白天天气晴好，明媚的阳光给你带来好心情的同事，也会是你感到有些热。"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"/>
+    <TextView
+        android:id="@+id/tv_car_wash"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:text="洗车指数：较不宜洗车，在未来一天无雨，风力较大，容易蒙上污垢。"
+        android:padding="10dp"/>
+    <TextView
+        android:id="@+id/tv_sport"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:text="运动建议：天气较好，但由于风力较大，推荐你在室内进行低强度运动。"
+        android:padding="10dp"/>
+</LinearLayout>
