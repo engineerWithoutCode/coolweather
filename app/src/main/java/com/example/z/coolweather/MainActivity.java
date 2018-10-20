@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -32,6 +33,7 @@ import org.litepal.LitePal;
 import org.litepal.crud.DataSupport;
 
 import Network.HttpUtil;
+import Network.NetWorkChangeReceive;
 import db.Customer;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -48,11 +50,14 @@ public class MainActivity extends AppCompatActivity {
     private PointTabView pointTabView;
     private Date date;
     private SimpleDateFormat simpleDateFormat;
-    private String currentDate;
+    private String currentDate,pic;
     private int size;
 
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
+
+    private IntentFilter intentFilter;
+    private NetWorkChangeReceive netWorkChangeReceive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +70,12 @@ public class MainActivity extends AppCompatActivity {
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
         setContentView(R.layout.activity_main);
+        //广播接收器
+        intentFilter = new IntentFilter();
+        intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        netWorkChangeReceive = new NetWorkChangeReceive();
+        registerReceiver(netWorkChangeReceive,intentFilter);
+
         bingPic = (ImageView)findViewById(R.id.back_ground);
         viewPager = (ViewPager)findViewById(R.id.view_pager);
         manageCity = (ImageView)findViewById(R.id.manage_city);
@@ -76,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         currentDate = simpleDateFormat.format(date);
         sp = getSharedPreferences("date", Context.MODE_PRIVATE);
         editor = sp.edit();
-        String pic = sp.getString("bing_pic",null);
+        pic = sp.getString("bing_pic",null);
         String day = sp.getString("day","dd");
         if(pic != null && day.equals(currentDate)){
             Glide.with(MainActivity.this).load(pic).into(bingPic);
@@ -199,13 +210,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String data = response.body().string();
-                editor.putString("bing_pic",data);
-                editor.putString("day",currentDate);
-                editor.apply();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Glide.with(MainActivity.this).load(data).into(bingPic);
+                        if(data != null){
+                            Glide.with(MainActivity.this).load(data).into(bingPic);
+                            editor.putString("bing_pic",data);
+                            editor.putString("day",currentDate);
+                            editor.apply();
+                        }else{
+                            Glide.with(MainActivity.this).load(pic).into(bingPic);
+                        }
                     }
                 });
             }
